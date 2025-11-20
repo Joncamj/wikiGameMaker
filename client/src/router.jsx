@@ -4,21 +4,23 @@ import { createBrowserRouter } from "react-router";
 import { redirect } from "react-router";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Home from "./pages/Home";
+import Profile from "./pages/Profile";
 
-const checkAuth = async (props, next) => {
+export async function checkAuth () {
   const token = localStorage.getItem("token");
   if (!token) {
     throw redirect("/login");
   }
   
-  await next();
+  return null;
 };
 
 export const router = createBrowserRouter([
   {
     path: "/",
     middleware: [checkAuth],
-    element: <div />,
+    element: <Home />,
   },
   {
     path: "/login",
@@ -28,9 +30,9 @@ export const router = createBrowserRouter([
     path: "/register",
     element: <Register />,
   },
-  // {
-  //   path: "/profile",
-  //   loader: checkAuth,
-  //   element: <Profile />,
-  // },
+  {
+    path: "/profile",
+    loader: checkAuth,
+    element: <Profile />,
+  },
 ]);

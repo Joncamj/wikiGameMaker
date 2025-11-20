@@ -82,7 +82,7 @@ export async function updateProfile(req, res) {
 // Déconnecte l'utilisateur
 export async function logout(req, res) {
     res.clearCookie("token");
-    return res.json({ message: "Déconnexion réussie." });
+    return res.json({ message: "Déconnexion réussie.", success: true });
 }
 
 // Supprime le compte de l'utilisateur connecté

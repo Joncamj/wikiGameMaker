@@ -1,51 +1,34 @@
 import React, { useState } from "react";
+import { registerUser } from "../services/Api";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterForm() {
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-  const [message, setMessage] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  // Envoi du formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Vérification côté client
-    if (formData.password !== formData.confirmPassword) {
-      return setMessage("Les mots de passe ne correspondent pas.");
+    if (password !== confirmPassword) {
+      setError("Les mots de passe ne correspondent pas");
+      return;
     }
 
+    setLoading(true);
+    setError("");
+
     try {
-      const response = await fetch("http://localhost:5000/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
-          role: "user",
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setMessage("Inscription réussie !");
-        setFormData({ username: "", email: "", password: "", confirmPassword: "" });
-      } else {
-        setMessage(`${data.error || "Erreur lors de l’inscription"}`);
-      }
-    } catch (error) {
-      console.error(error);
-      setMessage("Erreur de connexion au serveur");
+      await registerUser({ username, email, password });
+      navigate("/login");
+    } catch (err) {
+      console.error("❌ Erreur d’inscription :", err);
+      setError(err.response?.data?.error || "Erreur lors de l'inscription");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,53 +44,50 @@ export default function RegisterForm() {
 
         <input
           type="text"
-          name="username"
           placeholder="Nom d'utilisateur"
-          value={formData.username}
-          onChange={handleChange}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
           required
         />
 
         <input
           type="email"
-          name="email"
           placeholder="Adresse email"
-          value={formData.email}
-          onChange={handleChange}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
           required
         />
 
         <input
           type="password"
-          name="password"
           placeholder="Mot de passe"
-          value={formData.password}
-          onChange={handleChange}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
           required
         />
 
         <input
           type="password"
-          name="confirmPassword"
           placeholder="Confirmer le mot de passe"
-          value={formData.confirmPassword}
-          onChange={handleChange}
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
           className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
           required
         />
 
         <button
           type="submit"
-          className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
+          disabled={loading}
+          className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition disabled:opacity-50"
         >
-          S’inscrire
+          {loading ? "Inscription..." : "S’inscrire"}
         </button>
 
-        {message && (
-          <p className="text-center text-sm mt-2 text-gray-700">{message}</p>
+        {error && (
+          <p className="text-center text-sm mt-2 text-red-600">{error}</p>
         )}
       </form>
     </div>

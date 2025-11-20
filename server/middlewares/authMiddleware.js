@@ -5,10 +5,9 @@ dotenv.config()
 // Middleware pour vérifier le token JWT
 export function protect(req, res, next) {
     console.log("Vérification du token JWT");
-
   // Récupère le token dans l'en-tête Authorization OU dans les cookies
   const authHeader = req.headers["authorization"]
-  const tokenFromHeader = authHeader?.split("")[1]
+  const tokenFromHeader = authHeader?.split(" ")[1]
   const tokenFromCookie = req.cookies?.tokenFromCookie
   const token = tokenFromHeader || tokenFromCookie
 

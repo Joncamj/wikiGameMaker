@@ -1,26 +1,25 @@
 import React, { useState } from "react";
-import { login } from "../services/Api";
-import { useNavigate } from "react-router"
+import { loginUser } from "../services/Api";
+// import { useNavigate } from "react-router-dom";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate()
-  
+  // const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage("");
+    setError("");
 
     try {
-      await login ({email, password})
-      navigate("/")
-    } catch (error) {
-      console.error("Erreur :", error);
-      setMessage("Une erreur est survenue");
+      await loginUser({ email, password });
+      // navigate("/profile");
+    } catch (err) {
+      console.error(" Erreur de connexion :", err);
+      setError(err.response?.data?.error || "Erreur de connexion");
     } finally {
       setLoading(false);
     }
@@ -72,9 +71,9 @@ export default function LoginForm() {
           {loading ? "Connexion..." : "Se connecter"}
         </button>
 
-        {message && (
-          <p className="mt-4 text-center text-sm font-medium text-gray-700">
-            {message}
+        {error && (
+          <p className="mt-4 text-center text-sm font-medium text-red-600">
+            {error}
           </p>
         )}
       </form>
