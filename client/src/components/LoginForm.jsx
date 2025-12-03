@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { loginUser } from "../services/Api";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,7 +16,8 @@ export default function LoginForm() {
 
     try {
       await loginUser({ email, password });
-      // navigate("/profile");
+      const originUrl = sessionStorage.getItem("origin.url") || "/";
+      navigate(originUrl);
     } catch (err) {
       console.error(" Erreur de connexion :", err);
       setError(err.response?.data?.error || "Erreur de connexion");
@@ -31,9 +32,6 @@ export default function LoginForm() {
         onSubmit={handleSubmit}
         className="bg-white p-8 rounded-2xl shadow-md w-96 border border-gray-200"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
-          Connexion
-        </h2>
 
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-1">

@@ -64,7 +64,7 @@ export default function Profile() {
         <h2>Informations utilisateur</h2>
 
         <div className="profile-line">
-          <strong>ID de l’utilisateur :</strong> {user?.id}
+          <strong>Nom de l’utilisateur :</strong> {user?.username}
         </div>
 
         <div className="profile-line">

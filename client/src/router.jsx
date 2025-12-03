@@ -6,10 +6,15 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
+import Characters from "./pages/Characters";
+import CreateCharacter from "./pages/CreateCharacter";
+
 
 export async function checkAuth () {
   const token = localStorage.getItem("token");
   if (!token) {
+    const originUrl = window.location.href.replace(window.location.origin, "");
+    sessionStorage.setItem("origin.url", originUrl);
     throw redirect("/login");
   }
   
@@ -18,6 +23,7 @@ export async function checkAuth () {
 
 export const router = createBrowserRouter([
   {
+    id: "Home",
     path: "/",
     middleware: [checkAuth],
     element: <Home />,
@@ -35,4 +41,15 @@ export const router = createBrowserRouter([
     loader: checkAuth,
     element: <Profile />,
   },
+  {
+    id: "Characters",
+    path: "/characters",
+    loader: checkAuth,
+    element: <Characters />
+  },
+  {
+    path: "/characters/create",
+    loader: checkAuth,
+    element: <CreateCharacter />
+  }
 ]);

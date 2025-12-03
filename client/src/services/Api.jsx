@@ -3,7 +3,6 @@ import axios from "axios";
 const instance = axios.create({
   baseURL: "http://localhost:5000",
   headers: {
-    // "Authorization" : `Bearer ${"BEARER_TOKEN"}`,
     "Content-Type": "application/json",
   },
 });
@@ -45,13 +44,14 @@ export async function getProfile() {
 
 export async function logoutUser() {
   const response = await instance.get("/auth/logout")
-localStorage.removeItem("token")
+  localStorage.removeItem("token");
+  sessionStorage.removeItem("origin.url");
 
-if (response.data.success) {
-  return response.data
-} else {
-  throw new Error("Logout failed")
-}
+  if (response.data.success) {
+    return response.data
+  } else {
+    throw new Error("Logout failed")
+  }
 }
 
 export async function deleteAccount() {

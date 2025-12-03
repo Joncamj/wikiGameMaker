@@ -25,7 +25,7 @@ export default function RegisterForm() {
       await registerUser({ username, email, password });
       navigate("/login");
     } catch (err) {
-      console.error("❌ Erreur d’inscription :", err);
+      console.error("Erreur d’inscription :", err);
       setError(err.response?.data?.error || "Erreur lors de l'inscription");
     } finally {
       setLoading(false);
@@ -38,9 +38,6 @@ export default function RegisterForm() {
         onSubmit={handleSubmit}
         className="bg-white p-6 rounded-2xl shadow-lg w-80 flex flex-col gap-3"
       >
-        <h2 className="text-2xl font-semibold text-center mb-2 text-gray-800">
-          Inscription
-        </h2>
 
         <input
           type="text"

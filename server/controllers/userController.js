@@ -6,7 +6,7 @@ import {
     getAllUsers,
     updateUser,
     deleteUser as deleteUserModel
-} from "../models/usersModel.js"
+} from "../models/userModel.js"
 
 // Traitement de l'inscription
 export async function register(req, res) {
@@ -41,14 +41,21 @@ export async function login(req, res) {
     }
 
     try {
+        console.log("findUser: ", email);
         const user = await findUserByEmail(email);
+        console.log("user: ", user);
 
         if (!user || !(await bcrypt.compare(password, user.password))) {
             return res.status(400).json({ error: "Email ou mot de passe incorrect." });
         }
 
         const token = jwt.sign(
-            { id: user.id, email: user.email, role: user.role },
+            {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                role: user.role,
+            },
             process.env.JWT_SECRET,
             { expiresIn: "1h" }
         );
@@ -63,6 +70,7 @@ export async function login(req, res) {
 
 // Affiche le profil (nécessite d'être connecté)
 export async function showProfile(req, res) {
+    console.log('u: ',req.user);
     return res.json({ user: req.user });
 }
 

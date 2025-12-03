@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { Navigation } from "../components/Navigation";
 
 export default function Home() {
     const navigate = useNavigate()
@@ -10,6 +11,7 @@ export default function Home() {
     }
 
     return (
+      <>
         <div className="relative min-h-screen bg-gray-100 flex flex-col items-center">
 
   <div className="absolute top-0 left-0 w-full flex justify-center pt-6">
@@ -26,6 +28,8 @@ export default function Home() {
   <div className="flex flex-col justify-center items-center flex-grow">
   </div>
 </div>
+      </>
+
 
     )
 }

@@ -3,6 +3,7 @@ import pool from "../config/db.js"
 // Recherche un utilisateur par son email
 export async function findUserByEmail(email) {
     const [rows] = await pool.query("SELECT * FROM user WHERE email = ?", [email]);
+    console.log(rows);
     return rows[0];
 }
 

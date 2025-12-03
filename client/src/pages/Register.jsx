@@ -1,8 +1,17 @@
+import { useEffect } from "react";
 import React from "react";
 import RegisterForm from "../components/RegisterForm.jsx";
 import "./register.css";
 
 export default function Register() {
+
+  useEffect(() => {
+    document.body.classList.add("no-scroll");
+    return () => {
+      document.body.classList.remove("no-scroll");
+    };
+  }, []);
+
   return (
     <div className="register-page">
 
